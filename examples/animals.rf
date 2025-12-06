@@ -1,0 +1,20 @@
+// Class inheritance
+class Animal {
+  init(name) {
+    this.name = name;
+  }
+  speak() {
+    return this.name + " makes a sound";
+  }
+}
+
+class Dog < Animal {
+  speak() {
+    return this.name + " barks";
+  }
+}
+
+let a = Animal("generic");
+let d = Dog("Rex");
+print(a.speak());
+print(d.speak());

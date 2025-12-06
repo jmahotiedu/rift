@@ -1,0 +1,30 @@
+// Linked list using classes
+class Node {
+  init(value, next) {
+    this.value = value;
+    this.next = next;
+  }
+}
+
+class LinkedList {
+  init() {
+    this.head = nil;
+  }
+  push(v) {
+    this.head = Node(v, this.head);
+  }
+  pop() {
+    if (this.head == nil) return nil;
+    let v = this.head.value;
+    this.head = this.head.next;
+    return v;
+  }
+}
+
+let list = LinkedList();
+list.push("c");
+list.push("b");
+list.push("a");
+print(list.pop());
+print(list.pop());
+print(list.pop());
