@@ -56,6 +56,8 @@ pip install -e ".[dev]"
 pytest
 ```
 
+**CI** — GitHub Actions runs pytest (and mypy, ruff) on every push to main.
+
 ## Architecture
 
 Source text → **Scanner** (tokens) → **Parser** (recursive descent, AST) → **Resolver** (bind variables, check scope) → **Interpreter** (tree-walk, environment chain). No bytecode; each expression/statement is evaluated by traversing the AST. Closures capture the defining environment; classes bind `this` and support single inheritance with `super`.
