@@ -1,4 +1,4 @@
-"""Entry point for rift: REPL or run a .rf file."""
+﻿"""Entry point for rift: REPL or run a .rf file."""
 
 from __future__ import annotations
 
@@ -20,27 +20,27 @@ def run(source: str, interpreter: Interpreter | None = None) -> bool:
     scanner = Scanner(source)
     scanner.scan_tokens()
     if scanner.errors:
-        for err in scanner.errors:
-            print(err, file=sys.stderr)
+        for scan_err in scanner.errors:
+            print(scan_err, file=sys.stderr)
         return False
 
     parser = Parser(scanner.tokens)
     try:
         statements = parser.parse()
     except Exception:
-        for err in parser.errors:
-            print(err, file=sys.stderr)
+        for parse_err in parser.errors:
+            print(parse_err, file=sys.stderr)
         return False
     if parser.errors:
-        for err in parser.errors:
-            print(err, file=sys.stderr)
+        for parse_err in parser.errors:
+            print(parse_err, file=sys.stderr)
         return False
 
     resolver = Resolver(interpreter)
     resolver.resolve(statements)
     if resolver.errors:
-        for err in resolver.errors:
-            print(err, file=sys.stderr)
+        for resolve_err in resolver.errors:
+            print(resolve_err, file=sys.stderr)
         return False
 
     try:
@@ -65,7 +65,7 @@ def run_file(path: str) -> None:
 def run_prompt() -> None:
     """Interactive REPL."""
     interpreter = Interpreter()
-    print("Rift 0.1.0 — type exit or quit to leave")
+    print("Rift 0.1.0 - type exit or quit to leave")
     buf: list[str] = []
     while True:
         try:
@@ -98,8 +98,8 @@ def run_prompt() -> None:
         resolver = Resolver(interpreter)
         resolver.resolve(statements)
         if resolver.errors:
-            for err in resolver.errors:
-                print(err, file=sys.stderr)
+            for resolve_err in resolver.errors:
+                print(resolve_err, file=sys.stderr)
             buf.clear()
             continue
         buf.clear()
@@ -122,3 +122,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

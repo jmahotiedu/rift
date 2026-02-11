@@ -31,3 +31,26 @@ def test_closure_counter(capsys: pytest.CaptureFixture[str]) -> None:
 def test_closure_captures_outer() -> None:
     ok = run("fn outer(x) { fn inner() { return x; } return inner; } let f = outer(42); print(f());")
     assert ok is True
+
+
+def test_closure_instances_keep_separate_state(capsys: pytest.CaptureFixture[str]) -> None:
+    src = """
+    fn makeCounter() {
+      let count = 0;
+      fn inc() {
+        count = count + 1;
+        return count;
+      }
+      return inc;
+    }
+
+    let c1 = makeCounter();
+    let c2 = makeCounter();
+    print(c1());
+    print(c1());
+    print(c2());
+    """
+    ok = run(src)
+    assert ok is True
+    out = [line.strip() for line in capsys.readouterr().out.splitlines() if line.strip()]
+    assert out == ["1", "2", "1"]

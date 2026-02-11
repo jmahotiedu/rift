@@ -1,4 +1,4 @@
-# Rift
+﻿# Rift
 
 A tree-walking interpreter for the Rift programming language. Variables, functions, closures, classes with inheritance, control flow, and a small standard library.
 
@@ -44,29 +44,30 @@ print(fib(10));
 From the project root:
 
 ```bash
-pip install -e .
+python -m pip install -e ".[dev]"
 ```
 
 Then `rift` is available as a console script (or use `python -m rift`).
 
-## Tests
+## Verification
 
 ```bash
-pip install -e ".[dev]"
-pytest
+python -m pytest -q
+mypy rift/
+ruff check rift/ tests/
 ```
 
-**CI** — GitHub Actions runs pytest (and mypy, ruff) on every push to main.
+CI runs pytest, mypy, and ruff on every push to main/master.
 
 ## Architecture
 
-Source text → **Scanner** (tokens) → **Parser** (recursive descent, AST) → **Resolver** (bind variables, check scope) → **Interpreter** (tree-walk, environment chain). No bytecode; each expression/statement is evaluated by traversing the AST. Closures capture the defining environment; classes bind `this` and support single inheritance with `super`.
+Source text -> Scanner (tokens) -> Parser (recursive descent, AST) -> Resolver (bind variables, check scope) -> Interpreter (tree-walk, environment chain). No bytecode; each expression/statement is evaluated by traversing the AST. Closures capture the defining environment; classes bind `this` and support single inheritance with `super`.
 
 ## Tech
 
 - Python 3.11+
 - Stdlib only for the core; optional dev deps: pytest, mypy, ruff
-- Scanner → Parser (recursive descent) → Resolver → Interpreter
+- Scanner -> Parser (recursive descent) -> Resolver -> Interpreter
 
 ## Future work
 

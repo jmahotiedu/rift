@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from rift.__main__ import run
 from rift.scanner import Scanner
 
@@ -28,3 +26,18 @@ def test_resolver_error_use_before_decl() -> None:
 
 def test_runtime_error_not_callable() -> None:
     assert run("let x = 1; x();") is False
+
+
+def test_return_from_top_level_is_error() -> None:
+    assert run("return 123;") is False
+
+
+def test_super_outside_class_is_error() -> None:
+    assert run("print(super.foo());") is False
+
+
+def test_class_cannot_inherit_itself() -> None:
+    src = """
+    class Loop < Loop {}
+    """
+    assert run(src) is False

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from rift import ast_nodes as ast
-from rift.callable import NativeFunction, RiftCallable, RiftClass, RiftFunction
+from rift.callable import NativeFunction, RiftClass, RiftFunction
 from rift.environment import Environment
 from rift.errors import ReturnException, RiftRuntimeError
 from rift.instance import RiftInstance
@@ -31,10 +31,10 @@ class Interpreter:
                 value = self._evaluate(expression)
                 print(stringify(value))
             case ast.LetStmt(name, initializer):
-                value: object = None
+                initial_value: object = None
                 if initializer is not None:
-                    value = self._evaluate(initializer)
-                self._environment.define(name.lexeme, value)
+                    initial_value = self._evaluate(initializer)
+                self._environment.define(name.lexeme, initial_value)
             case ast.BlockStmt(statements):
                 self._execute_block(statements, Environment(self._environment))
             case ast.IfStmt(condition, then_branch, else_branch):
@@ -54,13 +54,14 @@ class Interpreter:
                     ret_val = self._evaluate(value)
                 raise ReturnException(ret_val)
             case ast.ClassStmt(name, superclass_expr, methods):
-                superclass: object = None
+                superclass: RiftClass | None = None
                 if superclass_expr is not None:
-                    superclass = self._evaluate(superclass_expr)
-                    if not isinstance(superclass, RiftClass):
+                    resolved_superclass = self._evaluate(superclass_expr)
+                    if not isinstance(resolved_superclass, RiftClass):
                         raise RiftRuntimeError(
                             superclass_expr.name, "superclass must be a class"
                         )
+                    superclass = resolved_superclass
 
                 self._environment.define(name.lexeme, None)
 

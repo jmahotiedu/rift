@@ -40,3 +40,22 @@ def test_inheritance(capsys: pytest.CaptureFixture[str]) -> None:
     ok = run(src)
     assert ok is True
     assert capsys.readouterr().out.strip() == "B"
+
+
+def test_super_method_dispatch(capsys: pytest.CaptureFixture[str]) -> None:
+    src = """
+    class Animal {
+      init(name) { this.name = name; }
+      speak() { return this.name + " noise"; }
+    }
+
+    class Dog < Animal {
+      speak() { return super.speak() + " bark"; }
+    }
+
+    let d = Dog("sam");
+    print(d.speak());
+    """
+    ok = run(src)
+    assert ok is True
+    assert capsys.readouterr().out.strip() == "sam noise bark"
